@@ -14,78 +14,77 @@ import com.retotecnico.enums.TiposAnimalesEnum;
 
 public class App {
 
-	 private static List<Animal> listaAnimales = new ArrayList<>();
+	private static List<Animal> listaAnimales = new ArrayList<>();
 
-	    public static void main(String[] args) {
-	        if (args != null && args.length > 0) {
-	            procesarArgumentos(args);
-	        } else {
-	            solicitarEntradaManual();
-	        }
+	public static void main(String[] args) {
+		if (args != null && args.length > 0) {
+			procesarArgumentos(args);
+		} else {
+			solicitarEntradaManual();
+		}
 
-	        mostrarAnimalesAgrupados(listaAnimales);
-	    }
+		mostrarAnimalesAgrupados(listaAnimales);
+	}
 
-	    private static void procesarArgumentos(String[] args) {
-	        System.out.println("Procesando argumentos de línea de comandos...");
+	private static void procesarArgumentos(String[] args) {
+		System.out.println("Procesando argumentos de línea de comandos...");
 
-	        for (String entrada : args) {
-	            agregarAnimal(entrada);
-	        }
-	    }
+		for (String entrada : args) {
+			agregarAnimal(entrada);
+		}
+	}
 
-	    private static void solicitarEntradaManual() {
-	        Scanner scanner = new Scanner(System.in);
-	        System.out.println("Ingrese los datos de los animales (nombre|tipo|onomatopeya).");
-	        System.out.println("Una vez registrado, ingrese 'enviar' para ver el resultado.");
+	private static void solicitarEntradaManual() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Ingrese los datos de los animales (nombre|tipo|onomatopeya).");
+		System.out.println("Una vez registrado, ingrese 'enviar' para ver el resultado.");
 
-	        while (true) {
-	            System.out.print("Ingrese animal: ");
-	            String entrada = scanner.nextLine();
+		while (true) {
+			System.out.print("Ingrese animal: ");
+			String entrada = scanner.nextLine();
 
-	            if (entrada.equalsIgnoreCase("enviar")) {
-	                break;
-	            }
+			if (entrada.equalsIgnoreCase("enviar")) {
+				break;
+			}
 
-	            agregarAnimal(entrada);
-	        }
+			agregarAnimal(entrada);
+		}
 
-	        scanner.close();
-	    }
+		scanner.close();
+	}
 
-	    private static void agregarAnimal(String entrada) {
-	        String[] partes = entrada.split("\\|");
-	        if (partes.length != 3) {
-	            System.out.println("Formato incorrecto. Debe ser: nombre|tipo|onomatopeya.");
-	            return;
-	        }
+	private static void agregarAnimal(String entrada) {
+		String[] partes = entrada.split("\\|");
+		if (partes.length != 3) {
+			System.out.println("Formato incorrecto. Debe ser: nombre|tipo|onomatopeya.");
+			return;
+		}
 
-	        String nombre = partes[0];
-	        TiposAnimalesEnum tipo = TiposAnimalesEnum.fromString(partes[1]);
-	        String onomatopeya = partes[2];
+		String nombre = partes[0];
+		TiposAnimalesEnum tipo = TiposAnimalesEnum.fromString(partes[1]);
+		String onomatopeya = partes[2];
 
-	        switch (tipo) {
-	            case TERRESTRE:
-	                listaAnimales.add(new Terrestre(nombre, onomatopeya));
-	                break;
-	            case VOLADOR:
-	                listaAnimales.add(new Volador(nombre, onomatopeya));
-	                break;
-	            case ACUATICO:
-	                listaAnimales.add(new Acuatico(nombre, onomatopeya));
-	                break;
-	            default:
-	                System.out.println("Tipo desconocido: " + tipo);
-	        }
-	    }
+		switch (tipo) {
+		case TERRESTRE:
+			listaAnimales.add(new Terrestre(nombre, onomatopeya));
+			break;
+		case VOLADOR:
+			listaAnimales.add(new Volador(nombre, onomatopeya));
+			break;
+		case ACUATICO:
+			listaAnimales.add(new Acuatico(nombre, onomatopeya));
+			break;
+		default:
+			System.out.println("Tipo desconocido: " + tipo);
+		}
+	}
 
-	    private static void mostrarAnimalesAgrupados(List<Animal> animales) {
-	        Map<String, List<Animal>> agrupados = animales.stream()
-	                .collect(Collectors.groupingBy(Animal::getTipo));
+	private static void mostrarAnimalesAgrupados(List<Animal> animales) {
+		Map<String, List<Animal>> agrupados = animales.stream().collect(Collectors.groupingBy(Animal::getTipo));
 
-	        agrupados.forEach((tipo, lista) -> {
-	            System.out.println("\nAnimales " + tipo + "s:");
-	            lista.forEach(animal -> System.out.println("  - " + animal.getNombre() + " → " + animal.emitirSonido()));
-	        });
-	    }
+		agrupados.forEach((tipo, lista) -> {
+			System.out.println("\nAnimales " + tipo + "s:");
+			lista.forEach(animal -> System.out.println("  - " + animal.getNombre() + " → " + animal.emitirSonido()));
+		});
+	}
 }
